@@ -1,19 +1,24 @@
-import {Directive, ElementRef, Renderer, HostListener, HostBinding} from '@angular/core';
+import {
+  Directive, ElementRef, Renderer, HostListener, HostBinding, OnInit,
+  Input
+} from '@angular/core';
 // ElementRef tells the Angular 2 Framework: "When you create this directive, I need
 // this argument of type ElementRef"
 
 @Directive({
   selector: '[dirHighlight]'
 })
-export class HighlightDirective {
-  private backgroundColor = 'white';
+export class HighlightDirective  implements OnInit {
+  private backgroundColor: string;
+  @Input() defaultColor = 'white';
+  @Input() highlightColor = 'green';
 
   @HostListener('mouseenter') mouseover() {
-    this.backgroundColor = 'green';
+    this.backgroundColor = this.highlightColor;
   }
 
   @HostListener('mouseleave') mouseleave() {
-    this.backgroundColor = 'white';
+    this.backgroundColor = this.defaultColor;
   }
 
   @HostBinding('style.backgroundColor') get setColor() {
@@ -27,6 +32,10 @@ export class HighlightDirective {
 
     // This is the better way: Use a renderer
     // this.renderer.setElementStyle(this.elementRef.nativeElement, 'background-color', 'green');
+  }
+
+  ngOnInit() {
+    this.backgroundColor = this.defaultColor;
   }
 
 }
